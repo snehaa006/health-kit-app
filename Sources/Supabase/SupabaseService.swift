@@ -113,12 +113,18 @@ final class SupabaseService {
 
     // MARK: - Reads
 
-    /// Pulls every metric for the dashboard in a single round trip.
+    /// Pulls every metric for the dashboard, paging until the server runs out.
     ///
-    /// Deliberately *not* one request per type: six sequential round trips is
-    /// six times the latency for the same bytes, and PostgREST is happy to
-    /// return the lot in one response for the charts to group locally. The
-    /// `(patient_id, type, start_date desc)` index in schema.sql covers this.
+    /// Paging is not optional here. PostgREST caps a response at `db-max-rows`
+    /// (1,000 by default) no matter what `limit` asks for, and it does so
+    /// silently -- no error, no flag, just a short array. Combined with an
+    /// ascending sort that quietly returned the *oldest* thousand rows and
+    /// dropped everything recent, so eleven metrics that had data looked empty.
+    ///
+    /// The loop advances by however many rows actually came back rather than by
+    /// the requested page size, and stops only on an empty page. Advancing by the
+    /// requested size would lose data on any project whose cap is lower than the
+    /// page size we happen to ask for.
     ///
     /// `nonisolated` for the same reason as the writes -- `PostgrestResponse` is
     /// not `Sendable`, so the call is kept off the main actor entirely and only
@@ -126,17 +132,29 @@ final class SupabaseService {
     nonisolated func fetchSamples(
         since: Date,
         patientID: UUID,
-        limit: Int = 20_000
+        pageSize: Int = 1_000,
+        maxRows: Int = 100_000
     ) async throws -> [HealthSampleReading] {
-        try await client
-            .from(SupabaseConfig.table)
-            .select("id,type,value,unit,start_date,source,metadata")
-            .eq("patient_id", value: patientID)
-            .gte("start_date", value: HealthSampleRow.timestamp(since))
-            .order("start_date", ascending: true)
-            .limit(limit)
-            .execute()
-            .value
+        var all: [HealthSampleReading] = []
+        var offset = 0
+
+        while all.count < maxRows {
+            let page: [HealthSampleReading] = try await client
+                .from(SupabaseConfig.table)
+                .select("id,type,value,unit,start_date,source,metadata")
+                .eq("patient_id", value: patientID)
+                .gte("start_date", value: HealthSampleRow.timestamp(since))
+                .order("start_date", ascending: true)
+                .range(from: offset, to: offset + pageSize - 1)
+                .execute()
+                .value
+
+            if page.isEmpty { break }
+            all.append(contentsOf: page)
+            offset += page.count
+        }
+
+        return all
     }
 
     /// Mirrors deletions the user made in the Health app.
