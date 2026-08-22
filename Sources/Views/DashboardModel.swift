@@ -126,7 +126,7 @@ final class DashboardModel {
     var range: HistoryWindow = .month
 
     /// Metrics that returned data, bundled into their dashboard sections.
-    /// A flat list of 37 cards is unusable, and for any given person most of
+    /// A flat list of 38 cards is unusable, and for any given person most of
     /// them will be empty.
     var populatedGroups: [GroupedSeries] {
         HealthMetric.Group.allCases.compactMap { group in
