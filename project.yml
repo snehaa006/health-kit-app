@@ -51,6 +51,11 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.snehaa006.HealthKitSync
+        # Free "sneha gupta (Personal Team)". Kept here rather than left to Xcode:
+        # Xcode writes it into project.pbxproj, which XcodeGen regenerates from
+        # this file -- so a rebuild of the project would otherwise drop it and
+        # break device signing.
+        DEVELOPMENT_TEAM: 632RC5RNK4
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "5.0"
