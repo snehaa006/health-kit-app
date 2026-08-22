@@ -130,7 +130,7 @@ final class SupabaseService {
     ) async throws -> [HealthSampleReading] {
         try await client
             .from(SupabaseConfig.table)
-            .select("id,type,value,unit,start_date,source")
+            .select("id,type,value,unit,start_date,source,metadata")
             .eq("patient_id", value: patientID)
             .gte("start_date", value: HealthSampleRow.timestamp(since))
             .order("start_date", ascending: true)

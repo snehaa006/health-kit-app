@@ -23,7 +23,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Reads your heart rate, steps, active energy, blood oxygen, heart rate variability, and workouts so they can be synced to your health dashboard.</string>
+	<string>Reads your activity, heart, sleep, respiratory, body, mobility, and hearing data — including everything your Apple Watch records — so it can be synced to your health dashboard.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

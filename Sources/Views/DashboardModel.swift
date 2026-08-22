@@ -50,6 +50,16 @@ extension MetricSeries {
     private static let downsampleThreshold = 600
 
     init(metric: HealthMetric, rows: [HealthSampleReading], calendar: Calendar) {
+        // Sleep arrives as overlapping samples: HealthKit nests the asleep
+        // stages inside an enclosing `inBed` interval, so totalling every row
+        // would count most of a night twice. Only the asleep stages contribute.
+        let rows = metric == .sleepAnalysis
+            ? rows.filter {
+                guard let value = $0.metadata?.categoryValue else { return false }
+                return HealthMetric.asleepCategoryValues.contains(value)
+            }
+            : rows
+
         let values: [(Date, Double)] = rows.compactMap { row in
             guard let value = row.value else { return nil }
             return (row.startDate, metric.chartValue(value))
@@ -93,6 +103,13 @@ extension MetricSeries {
     }
 }
 
+/// One dashboard section: a group and the metrics in it that have data.
+struct GroupedSeries: Identifiable {
+    let group: HealthMetric.Group
+    let series: [MetricSeries]
+    var id: String { group.rawValue }
+}
+
 /// Loads the dashboard's data and shapes it for the charts.
 @MainActor
 @Observable
@@ -121,6 +138,22 @@ final class DashboardModel {
     /// is as far back as the sync ever reached, so offering a longer range would
     /// draw an empty stretch that reads as lost data rather than as never-synced.
     var range: Range = .week
+
+    /// Metrics that returned data, bundled into their dashboard sections.
+    /// A flat list of 37 cards is unusable, and for any given person most of
+    /// them will be empty.
+    var populatedGroups: [GroupedSeries] {
+        HealthMetric.Group.allCases.compactMap { group in
+            let members = series.filter { $0.metric.group == group && !$0.isEmpty }
+            return members.isEmpty ? nil : GroupedSeries(group: group, series: members)
+        }
+    }
+
+    /// Everything that came back empty, kept out of the way but not hidden --
+    /// knowing a metric produced nothing is worth something.
+    var emptyMetrics: [HealthMetric] {
+        series.filter(\.isEmpty).map(\.metric)
+    }
 
     private let supabase = SupabaseService.shared
 

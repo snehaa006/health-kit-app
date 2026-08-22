@@ -17,6 +17,39 @@ struct WorkoutMetadata: Encodable, Sendable, Equatable {
     }
 }
 
+/// Extra detail for category samples, which carry a *label* rather than a number.
+///
+/// This is what makes sleep usable downstream: without the stage, every row in a
+/// night looks identical, and summing them would double-count "in bed" against
+/// the asleep stages nested inside it.
+struct CategoryMetadata: Encodable, Sendable, Equatable {
+    let categoryValue: Int
+    let categoryName: String
+
+    enum CodingKeys: String, CodingKey {
+        case categoryValue = "category_value"
+        case categoryName = "category_name"
+    }
+}
+
+/// Whatever detail a sample carries beyond its scalar value.
+///
+/// Encoded as a bare single value rather than a tagged wrapper, so the jsonb
+/// column holds `{"activity_name": …}` or `{"category_name": …}` directly and
+/// stays queryable from SQL without unwrapping a discriminator first.
+enum SampleMetadata: Encodable, Sendable, Equatable {
+    case workout(WorkoutMetadata)
+    case category(CategoryMetadata)
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .workout(let value):  try container.encode(value)
+        case .category(let value): try container.encode(value)
+        }
+    }
+}
+
 /// One row of `public.health_samples`.
 ///
 /// Deliberately a plain value type: it is built on a background queue inside the
@@ -32,7 +65,7 @@ struct HealthSampleRow: Encodable, Sendable, Equatable {
     let endDate: String
     let source: String?
     let sourceBundleID: String?
-    let metadata: WorkoutMetadata?
+    let metadata: SampleMetadata?
     let healthKitUUID: UUID
 
     enum CodingKeys: String, CodingKey {
@@ -72,7 +105,9 @@ extension HealthSampleRow {
         samples.compactMap { sample in
             let source = sample.sourceRevision.source
 
-            if metric == .workout {
+            switch metric.kind {
+
+            case .workout:
                 guard let workout = sample as? HKWorkout else { return nil }
                 return HealthSampleRow(
                     patientID: patientID,
@@ -83,38 +118,115 @@ extension HealthSampleRow {
                     endDate: timestamp(workout.endDate),
                     source: source.name,
                     sourceBundleID: source.bundleIdentifier,
-                    metadata: WorkoutMetadata(
-                        activityID: workout.workoutActivityType.rawValue,
-                        activityName: workout.workoutActivityType.displayName,
-                        // `totalEnergyBurned` / `totalDistance` are deprecated as of
-                        // iOS 18; `statistics(for:)` is the supported replacement.
-                        totalEnergyKcal: workout
-                            .statistics(for: HKQuantityType(.activeEnergyBurned))?
-                            .sumQuantity()?
-                            .doubleValue(for: .kilocalorie()),
-                        totalDistanceMeters: workout.totalDistanceMeters
+                    metadata: .workout(
+                        WorkoutMetadata(
+                            activityID: workout.workoutActivityType.rawValue,
+                            activityName: workout.workoutActivityType.displayName,
+                            // `totalEnergyBurned` / `totalDistance` are deprecated as of
+                            // iOS 18; `statistics(for:)` is the supported replacement.
+                            totalEnergyKcal: workout
+                                .statistics(for: HKQuantityType(.activeEnergyBurned))?
+                                .sumQuantity()?
+                                .doubleValue(for: .kilocalorie()),
+                            totalDistanceMeters: workout.totalDistanceMeters
+                        )
                     ),
                     healthKitUUID: workout.uuid
                 )
+
+            case .category:
+                guard let categorySample = sample as? HKCategorySample else { return nil }
+                return HealthSampleRow(
+                    patientID: patientID,
+                    type: metric.rawValue,
+                    value: metric.categoryValue(for: categorySample),
+                    unit: metric.unitLabel,
+                    startDate: timestamp(categorySample.startDate),
+                    endDate: timestamp(categorySample.endDate),
+                    source: source.name,
+                    sourceBundleID: source.bundleIdentifier,
+                    metadata: .category(
+                        CategoryMetadata(
+                            categoryValue: categorySample.value,
+                            categoryName: metric.categoryName(for: categorySample.value)
+                        )
+                    ),
+                    healthKitUUID: categorySample.uuid
+                )
+
+            case .quantity:
+                guard
+                    let quantitySample = sample as? HKQuantitySample,
+                    let value = metric.normalizedValue(from: quantitySample.quantity)
+                else { return nil }
+
+                return HealthSampleRow(
+                    patientID: patientID,
+                    type: metric.rawValue,
+                    value: value,
+                    unit: metric.unitLabel,
+                    startDate: timestamp(quantitySample.startDate),
+                    endDate: timestamp(quantitySample.endDate),
+                    source: source.name,
+                    sourceBundleID: source.bundleIdentifier,
+                    metadata: nil,
+                    healthKitUUID: quantitySample.uuid
+                )
             }
+        }
+    }
+}
 
-            guard
-                let quantitySample = sample as? HKQuantitySample,
-                let value = metric.normalizedValue(from: quantitySample.quantity)
-            else { return nil }
+// MARK: - Category samples
 
-            return HealthSampleRow(
-                patientID: patientID,
-                type: metric.rawValue,
-                value: value,
-                unit: metric.unitLabel,
-                startDate: timestamp(quantitySample.startDate),
-                endDate: timestamp(quantitySample.endDate),
-                source: source.name,
-                sourceBundleID: source.bundleIdentifier,
-                metadata: nil,
-                healthKitUUID: quantitySample.uuid
-            )
+extension HealthMetric {
+
+    /// Sleep stages that mean *actually asleep*.
+    ///
+    /// HealthKit nests the asleep stages inside an enclosing `inBed` sample, so
+    /// summing every sleep row for a night roughly doubles the total. Anything
+    /// totalling sleep has to filter to these first.
+    static let asleepCategoryValues: Set<Int> = [
+        HKCategoryValueSleepAnalysis.asleepUnspecified.rawValue,
+        HKCategoryValueSleepAnalysis.asleepCore.rawValue,
+        HKCategoryValueSleepAnalysis.asleepDeep.rawValue,
+        HKCategoryValueSleepAnalysis.asleepREM.rawValue,
+    ]
+
+    /// The number stored for a category sample.
+    ///
+    /// Intervals keep their duration; events keep a count of 1. A high-heart-rate
+    /// notification is instantaneous, so storing its duration would record zero
+    /// and chart as though it never happened.
+    func categoryValue(for sample: HKCategorySample) -> Double {
+        switch self {
+        case .sleepAnalysis, .mindfulSession:
+            return sample.endDate.timeIntervalSince(sample.startDate)
+        default:
+            return 1
+        }
+    }
+
+    func categoryName(for value: Int) -> String {
+        switch self {
+        case .sleepAnalysis:
+            switch HKCategoryValueSleepAnalysis(rawValue: value) {
+            case .inBed:              return "In Bed"
+            case .asleepUnspecified:  return "Asleep"
+            case .asleepCore:         return "Core"
+            case .asleepDeep:         return "Deep"
+            case .asleepREM:          return "REM"
+            case .awake:              return "Awake"
+            default:                  return "Stage \(value)"
+            }
+        case .appleStandHour:
+            return value == HKCategoryValueAppleStandHour.stood.rawValue ? "Stood" : "Idle"
+        case .mindfulSession:
+            return "Mindful Session"
+        case .highHeartRateEvent:        return "High Heart Rate"
+        case .lowHeartRateEvent:         return "Low Heart Rate"
+        case .irregularHeartRhythmEvent: return "Irregular Rhythm"
+        default:                         return "Event"
         }
     }
 }

@@ -9,15 +9,34 @@ import Foundation
 /// carry whatever the charts need, and neither drags the other's requirements
 /// along.
 struct HealthSampleReading: Decodable, Sendable, Identifiable, Equatable {
+
+    /// The slice of `metadata` the charts actually need.
+    ///
+    /// Sleep is the reason this exists: HealthKit nests the asleep stages inside
+    /// an enclosing `inBed` sample, so a nightly total that ignores the stage
+    /// counts most of the night twice.
+    struct Metadata: Decodable, Sendable, Equatable {
+        let categoryValue: Int?
+        let categoryName: String?
+        let activityName: String?
+
+        enum CodingKeys: String, CodingKey {
+            case categoryValue = "category_value"
+            case categoryName = "category_name"
+            case activityName = "activity_name"
+        }
+    }
+
     let id: UUID
     let type: String
     let value: Double?
     let unit: String
     let startDate: Date
     let source: String?
+    let metadata: Metadata?
 
     enum CodingKeys: String, CodingKey {
-        case id, type, value, unit, source
+        case id, type, value, unit, source, metadata
         case startDate = "start_date"
     }
 
@@ -28,6 +47,7 @@ struct HealthSampleReading: Decodable, Sendable, Identifiable, Equatable {
         value     = try container.decodeIfPresent(Double.self, forKey: .value)
         unit      = try container.decode(String.self, forKey: .unit)
         source    = try container.decodeIfPresent(String.self, forKey: .source)
+        metadata  = try container.decodeIfPresent(Metadata.self, forKey: .metadata)
 
         // Parsed by hand rather than through a `dateDecodingStrategy`, because
         // Postgres renders `timestamptz` with a variable number of fractional

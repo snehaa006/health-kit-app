@@ -27,16 +27,34 @@ Watch data.
 
 ## Metrics
 
-| Metric | Unit stored | Chart | Typical source |
-|---|---|---|---|
-| Heart Rate | `count/min` | line | Apple Watch |
-| Steps | `count` | daily bars | iPhone + Watch |
-| Active Energy | `kcal` | daily bars | Apple Watch |
-| Blood Oxygen | `%` | line | Apple Watch |
-| HRV (SDNN) | `ms` | line | Apple Watch |
-| Workouts | `s` (charted as min) | daily bars | Apple Watch |
+**37 metrics across 7 groups.** Three different shapes of HealthKit sample, and
+the difference matters at every layer:
+
+| Shape | Examples | Carries |
+|---|---|---|
+| **Quantity** | heart rate, steps, weight, walking speed | a number + unit |
+| **Category** | sleep, mindful sessions, stand hours, heart events | an interval + a *label*, no number |
+| **Workout** | any recorded workout | an interval + totals |
+
+| Group | Metrics |
+|---|---|
+| **Heart** | Heart rate, resting HR, walking HR, HRV, HR recovery, VO₂ max, high/low HR events, irregular rhythm |
+| **Respiratory** | Respiratory rate, blood oxygen |
+| **Activity** | Steps, walking/running + cycling distance, flights, active + resting energy, exercise/stand time, stand hours, physical effort, daylight, workouts |
+| **Sleep & Mind** | Sleep (with stages), mindful minutes |
+| **Body** | Weight, height, BMI, body fat, lean mass |
+| **Mobility** | Walking speed, step length, asymmetry, double support, stair speeds |
+| **Hearing** | Environmental sound, headphone audio |
 
 Blood pressure is deliberately absent — the Watch does not measure it.
+
+### Sleep needs care
+
+Sleep is stored per stage (`inBed`, `asleepCore`, `asleepDeep`, `asleepREM`,
+`awake`) in the `metadata` column. HealthKit **nests the asleep stages inside an
+enclosing `inBed` interval**, so summing every sleep row for a night roughly
+doubles the real total. Anything totalling sleep must filter to the asleep
+stages first — the dashboard does.
 
 ## Architecture
 
@@ -136,6 +154,7 @@ there.
 - Anchored incremental sync, verified: a second run reports "Already up to date"
   rather than re-uploading
 - Apple Watch data flowing — heart rate, active energy, HRV, steps
+- Sleep, category samples, and all 37 metric types
 - Deletion mirroring from the Health app
 - Swift Charts dashboard reading back from Supabase
 

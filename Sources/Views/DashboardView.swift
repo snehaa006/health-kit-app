@@ -51,17 +51,35 @@ struct DashboardView: View {
             .padding(.top, 40)
 
         } else {
-            ForEach(model.series) { series in
-                if series.isEmpty {
-                    EmptyMetricCard(metric: series.metric)
-                } else {
-                    NavigationLink {
-                        MetricDetailView(series: series, range: model.range)
-                    } label: {
-                        MetricCard(series: series)
+            ForEach(model.populatedGroups) { grouped in
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(grouped.group.rawValue)
+                        .font(.title3.weight(.semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 8)
+
+                    ForEach(grouped.series) { series in
+                        NavigationLink {
+                            MetricDetailView(series: series, range: model.range)
+                        } label: {
+                            MetricCard(series: series)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+            }
+
+            if model.populatedGroups.isEmpty {
+                ContentUnavailableView(
+                    "Nothing synced yet",
+                    systemImage: "heart.text.square",
+                    description: Text("Tap Sync Now to send your Health data to Supabase.")
+                )
+                .padding(.top, 40)
+            }
+
+            if !model.emptyMetrics.isEmpty {
+                emptySection
             }
 
             if let loaded = model.lastLoaded {
@@ -71,6 +89,31 @@ struct DashboardView: View {
                     .padding(.top, 4)
             }
         }
+    }
+
+    /// Collapsed rather than hidden: most people will have no data for most of
+    /// these, and a metric that produced nothing is worth being able to check.
+    private var emptySection: some View {
+        DisclosureGroup {
+            VStack(spacing: 0) {
+                ForEach(model.emptyMetrics) { metric in
+                    HStack {
+                        Label(metric.displayName, systemImage: metric.symbolName)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                    .padding(.vertical, 8)
+                }
+            }
+        } label: {
+            Text("\(model.emptyMetrics.count) with no data")
+                .font(.subheadline.weight(.medium))
+        }
+        .padding(16)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
+        .padding(.horizontal)
+        .padding(.top, 8)
     }
 }
 
@@ -123,25 +166,6 @@ struct MetricCard: View {
         let samples = "\(series.sampleCount) sample\(series.sampleCount == 1 ? "" : "s")"
         guard !series.sources.isEmpty else { return samples }
         return "\(samples) · \(series.sources.joined(separator: ", "))"
-    }
-}
-
-struct EmptyMetricCard: View {
-    let metric: HealthMetric
-
-    var body: some View {
-        HStack {
-            Label(metric.displayName, systemImage: metric.symbolName)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
-            Spacer()
-            Text("No data yet")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-        }
-        .padding(16)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
-        .padding(.horizontal)
     }
 }
 
