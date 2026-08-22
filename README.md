@@ -86,15 +86,17 @@ Charts read back from **Supabase**, not from HealthKit. That makes them a check
 on the sync as well as a view of the data: if a chart looks right, the round trip
 worked.
 
-- One request fetches all six metrics, riding the
+- One request fetches every metric, riding the
   `(patient_id, type, start_date desc)` index.
+- Metrics are grouped into sections, and the ones with no data collapse behind a
+  disclosure — a flat list of 37 cards is unusable, and most will be empty.
 - Cumulative metrics (steps, energy, workouts) are summed into daily bars —
   HealthKit records steps in bursts of seconds, so raw samples would plot noise.
 - Rate metrics (heart rate, HRV, SpO₂) are drawn as readings, with the y-axis
   free to not start at zero.
 - Above 600 readings, points are averaged into hourly buckets to stay legible.
-- Metrics with nothing in them still render a "No data yet" row, so an empty
-  metric never looks like a missing one.
+- Empty metrics stay listed rather than disappearing, so a metric that produced
+  nothing never looks like one that failed to sync.
 
 ## Setup
 
@@ -166,7 +168,9 @@ there.
 
 **Notes**
 
-- Blood oxygen may never produce data: it is disabled in hardware on Series 9/10
-  units sold in the US after the 2024 import ruling.
+- **Blood oxygen and ECG never produce data on an Apple Watch SE** — it has
+  neither sensor. Wrist temperature needs Series 8 or later.
+- Adding metric types makes the Health permission sheet reappear, since
+  `getRequestStatusForAuthorization` reports `.shouldRequest` again.
 - HRV is recorded sparsely by the Watch, so a low count is normal rather than a
   sync failure.
