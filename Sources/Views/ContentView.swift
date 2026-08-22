@@ -5,6 +5,7 @@ struct ContentView: View {
     private let health = HealthKitManager.shared
     private let supabase = SupabaseService.shared
     private let engine = HealthSyncEngine.shared
+    private let background = BackgroundSyncCoordinator.shared
 
     @State private var email = ""
     @State private var password = ""
@@ -20,6 +21,7 @@ struct ContentView: View {
                     healthAccessSection
                     dashboardSection
                     syncSection
+                    backgroundSection
                     dataTypesSection
                 } else {
                     signInSection
@@ -193,6 +195,41 @@ struct ContentView: View {
             Label(message, systemImage: "exclamationmark.triangle.fill")
                 .foregroundStyle(.red)
                 .font(.footnote)
+        }
+    }
+
+    // MARK: - Automatic sync
+
+    @ViewBuilder
+    private var backgroundSection: some View {
+        Section {
+            if background.isEnabled {
+                Label("Automatic sync is on", systemImage: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+                LabeledContent("Types watched", value: "\(background.enabledTypeCount)")
+                LabeledContent(
+                    "Last automatic sync",
+                    value: background.lastBackgroundSync?
+                        .formatted(.relative(presentation: .numeric)) ?? "Not yet"
+                )
+            } else {
+                Button {
+                    Task { await background.enableBackgroundDelivery() }
+                } label: {
+                    Label("Turn On Automatic Sync", systemImage: "bolt.badge.clock")
+                }
+                .disabled(!health.isAvailable)
+            }
+
+            if let error = background.lastError {
+                Text(error)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+            }
+        } header: {
+            Text("Automatic Sync")
+        } footer: {
+            Text("HealthKit wakes the app when new samples arrive — including overnight — so your data syncs without opening it. iOS decides the timing and batches updates to protect battery, so expect it hourly rather than instantly.")
         }
     }
 

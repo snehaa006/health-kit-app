@@ -101,3 +101,51 @@ extension HealthMetric {
         "\(format(value)) \(chartUnit)"
     }
 }
+
+// MARK: - Why a metric is empty
+
+extension HealthMetric {
+
+    /// What it would take for this metric to produce data.
+    ///
+    /// Most empty metrics are not a sync failure and cannot be fixed in code:
+    /// the sensor does not exist, the activity has not happened, or nothing has
+    /// ever written the value. Saying so turns a blank row into an answer rather
+    /// than a worry.
+    var emptyHint: String {
+        switch self {
+        case .oxygenSaturation:
+            return "Needs a Watch with a blood oxygen sensor — the SE has none"
+        case .sleepAnalysis:
+            return "Wear your Watch overnight with Sleep turned on"
+        case .respiratoryRate:
+            return "Measured while you sleep"
+        case .vo2Max:
+            return "Recorded on outdoor walks and runs with GPS"
+        case .heartRateRecoveryOneMinute:
+            return "Measured in the minute after a workout"
+        case .workout:
+            return "Start a workout on your Watch"
+        case .mindfulSession:
+            return "Recorded by the Mindfulness app"
+        case .distanceCycling:
+            return "Recorded during cycling workouts"
+        case .headphoneAudioExposure:
+            return "Recorded while listening through headphones"
+        case .timeInDaylight:
+            return "Needs a Watch worn outdoors"
+        case .bodyMass, .height, .bodyMassIndex, .bodyFatPercentage, .leanBodyMass:
+            return "Entered by hand in the Health app, or by a connected scale"
+        case .highHeartRateEvent, .lowHeartRateEvent, .irregularHeartRhythmEvent:
+            return "Only appears if your Watch ever detects one — empty is good news"
+        case .stairAscentSpeed, .stairDescentSpeed:
+            return "Measured on stairs with your iPhone in a pocket"
+        case .walkingHeartRateAverage, .restingHeartRate:
+            return "Needs a full day of Watch wear to calculate"
+        case .appleStandHour, .appleStandTime, .appleExerciseTime:
+            return "Recorded by the activity rings while wearing your Watch"
+        default:
+            return "Nothing has recorded this yet"
+        }
+    }
+}

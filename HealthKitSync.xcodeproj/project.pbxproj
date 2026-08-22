@@ -20,6 +20,7 @@
 		AE7FAF5C54C519B5F427302F /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */; };
 		AF0765AF79D3BD63678A934B /* DashboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381F8F3D742CA7A127F5A1E5 /* DashboardModel.swift */; };
 		CEA342E4857FB962D5521636 /* HealthKitSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A69B6212A6698614B48C8D /* HealthKitSyncApp.swift */; };
+		D4E863AEE02BE083997317C8 /* BackgroundSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA86923386CC688AD816A740 /* BackgroundSyncCoordinator.swift */; };
 		F03B92DB4BA831AD830A22E2 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457B45E76F95E45C6FE5F66 /* DashboardView.swift */; };
 		F2C952B9DFEE0072B32CB73A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8081F5EC20489A4874EE924C /* ContentView.swift */; };
 /* End PBXBuildFile section */
@@ -40,6 +41,7 @@
 		C0EF46DAD3A289D6BDE97A3C /* HealthSampleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSampleRow.swift; sourceTree = "<group>"; };
 		C52F840BB21727679A3331A7 /* HealthMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthMetric.swift; sourceTree = "<group>"; };
 		D3713444438D4B5B5EEAFB1F /* MetricDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricDetailView.swift; sourceTree = "<group>"; };
+		DA86923386CC688AD816A740 /* BackgroundSyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSyncCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 		87DC0122D200338AD7F9D9AB /* HealthKit */ = {
 			isa = PBXGroup;
 			children = (
+				DA86923386CC688AD816A740 /* BackgroundSyncCoordinator.swift */,
 				5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */,
 				C52F840BB21727679A3331A7 /* HealthMetric.swift */,
 				BBE66C30FC0009A5C4F2BAC9 /* HealthSyncEngine.swift */,
@@ -179,6 +182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4E863AEE02BE083997317C8 /* BackgroundSyncCoordinator.swift in Sources */,
 				F2C952B9DFEE0072B32CB73A /* ContentView.swift in Sources */,
 				AF0765AF79D3BD63678A934B /* DashboardModel.swift in Sources */,
 				F03B92DB4BA831AD830A22E2 /* DashboardView.swift in Sources */,

@@ -160,11 +160,33 @@ there.
 - Deletion mirroring from the Health app
 - Swift Charts dashboard reading back from Supabase
 
+- **Automatic background sync** — HealthKit wakes the app when new samples
+  arrive, including overnight, with no interaction needed
+
+### How automatic sync works
+
+Two mechanisms have to line up, and neither is sufficient alone:
+
+1. `enableBackgroundDelivery` tells HealthKit it may wake the app. It persists
+   across launches and installs.
+2. An `HKObserverQuery` per type is what actually receives the wake-up. These do
+   **not** persist — they are re-registered on every launch from the app's
+   `init`, not from a view, because HealthKit relaunches straight into the
+   background where no view is ever created.
+
+The observer's completion handler is called on every path including failure:
+skipping it makes iOS back off and eventually stop delivering altogether.
+
+A background launch starts with no session in memory, so the coordinator
+restores from the Keychain before syncing — otherwise every background sync
+would fail on "sign in first" while a valid session sat unused.
+
+iOS decides the timing and batches to protect battery, so expect roughly hourly
+rather than instant.
+
 **Not built yet**
 
-- **Background delivery** (`HKObserverQuery` + `enableBackgroundDelivery`).
-  The entitlement is declared and verified as signable; the code is not written,
-  so syncing is manual for now.
+- Nothing blocking; see Notes for hardware limits.
 
 **Notes**
 

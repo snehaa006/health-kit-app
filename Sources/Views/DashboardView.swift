@@ -97,12 +97,16 @@ struct DashboardView: View {
         DisclosureGroup {
             VStack(spacing: 0) {
                 ForEach(model.emptyMetrics) { metric in
-                    HStack {
+                    VStack(alignment: .leading, spacing: 2) {
                         Label(metric.displayName, systemImage: metric.symbolName)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        Spacer()
+                        Text(metric.emptyHint)
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                            .padding(.leading, 28)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 8)
                 }
             }
