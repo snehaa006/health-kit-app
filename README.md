@@ -28,7 +28,7 @@ Watch data.
 
 ## Metrics
 
-**37 metrics across 7 groups.** Three different shapes of HealthKit sample, and
+**38 metrics across 7 groups.** Three different shapes of HealthKit sample, and
 the difference matters at every layer:
 
 | Shape | Examples | Carries |
@@ -90,7 +90,7 @@ worked.
 - One request fetches every metric, riding the
   `(patient_id, type, start_date desc)` index.
 - Metrics are grouped into sections, and the ones with no data collapse behind a
-  disclosure — a flat list of 37 cards is unusable, and most will be empty.
+  disclosure — a flat list of 38 cards is unusable, and most will be empty.
 - Cumulative metrics (steps, energy, workouts) are summed into daily bars —
   HealthKit records steps in bursts of seconds, so raw samples would plot noise.
 - Rate metrics (heart rate, HRV, SpO₂) are drawn as readings, with the y-axis
@@ -176,7 +176,7 @@ there.
 - Anchored incremental sync, verified: a second run reports "Already up to date"
   rather than re-uploading
 - Apple Watch data flowing — heart rate, active energy, HRV, steps
-- Sleep, category samples, and all 37 metric types
+- Sleep, category samples, and all 38 metric types
 - Deletion mirroring from the Health app
 - Swift Charts dashboard reading back from Supabase
 
