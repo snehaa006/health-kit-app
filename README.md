@@ -4,8 +4,9 @@ An iOS companion app that reads Apple Health data — including everything an
 Apple Watch records — and syncs it to Supabase, where a patient/doctor dashboard
 can read it under Row Level Security.
 
-Verified end to end on a physical iPhone 15 paired with an Apple Watch:
-**1,012 rows synced**, incremental re-syncs confirmed working.
+Verified end to end on a physical iPhone 15 paired with an Apple Watch SE:
+**4,182 rows across 18 metric types**, with automatic background sync confirmed
+firing unattended every few minutes and uploading only genuinely new samples.
 
 ---
 
