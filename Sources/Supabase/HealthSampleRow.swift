@@ -24,7 +24,7 @@ struct WorkoutMetadata: Encodable, Sendable, Equatable {
 /// a non-`Sendable` class, so converting to this struct before crossing is what
 /// keeps the sync engine clean under Swift 6 strict concurrency.
 struct HealthSampleRow: Encodable, Sendable, Equatable {
-    let userID: UUID
+    let patientID: UUID
     let type: String
     let value: Double?
     let unit: String
@@ -36,7 +36,7 @@ struct HealthSampleRow: Encodable, Sendable, Equatable {
     let healthKitUUID: UUID
 
     enum CodingKeys: String, CodingKey {
-        case userID = "user_id"
+        case patientID = "patient_id"
         case type
         case value
         case unit
@@ -67,7 +67,7 @@ extension HealthSampleRow {
     static func rows(
         from samples: [HKSample],
         metric: HealthMetric,
-        userID: UUID
+        patientID: UUID
     ) -> [HealthSampleRow] {
         samples.compactMap { sample in
             let source = sample.sourceRevision.source
@@ -75,7 +75,7 @@ extension HealthSampleRow {
             if metric == .workout {
                 guard let workout = sample as? HKWorkout else { return nil }
                 return HealthSampleRow(
-                    userID: userID,
+                    patientID: patientID,
                     type: metric.rawValue,
                     value: workout.duration,
                     unit: metric.unitLabel,
@@ -104,7 +104,7 @@ extension HealthSampleRow {
             else { return nil }
 
             return HealthSampleRow(
-                userID: userID,
+                patientID: patientID,
                 type: metric.rawValue,
                 value: value,
                 unit: metric.unitLabel,

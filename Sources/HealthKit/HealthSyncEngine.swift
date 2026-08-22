@@ -52,7 +52,7 @@ final class HealthSyncEngine {
             status = .failed("HealthKit isn't available on this device.")
             return
         }
-        guard let userID = supabase.userID else {
+        guard let patientID = supabase.userID else {
             status = .failed("Sign in to Supabase before syncing.")
             return
         }
@@ -66,7 +66,7 @@ final class HealthSyncEngine {
         for metric in HealthMetric.allCases {
             status = .syncing(metric)
             do {
-                let result = try await sync(metric, userID: userID)
+                let result = try await sync(metric, patientID: patientID)
                 uploaded += result.uploaded
                 deleted += result.deleted
             } catch {
@@ -85,7 +85,7 @@ final class HealthSyncEngine {
 
     private func sync(
         _ metric: HealthMetric,
-        userID: UUID
+        patientID: UUID
     ) async throws -> (uploaded: Int, deleted: Int) {
 
         // The same predicate on every run. The anchor records a position in
@@ -107,14 +107,14 @@ final class HealthSyncEngine {
                 metric: metric,
                 anchor: anchor,
                 predicate: predicate,
-                userID: userID
+                patientID: patientID
             )
 
             // Upload first, advance the anchor second. The reverse order loses
             // data permanently: the anchor would say "delivered" for samples
             // that never reached Supabase, and HealthKit never replays them.
             try await supabase.upsert(batch.rows)
-            try await supabase.delete(healthKitUUIDs: batch.deletedUUIDs, userID: userID)
+            try await supabase.delete(healthKitUUIDs: batch.deletedUUIDs, patientID: patientID)
 
             uploaded += batch.rows.count
             deleted += batch.deletedUUIDs.count
@@ -139,7 +139,7 @@ final class HealthSyncEngine {
         metric: HealthMetric,
         anchor: HKQueryAnchor?,
         predicate: NSPredicate,
-        userID: UUID
+        patientID: UUID
     ) async throws -> SyncBatch {
         let store = health.store
         return try await withCheckedThrowingContinuation { continuation in
@@ -156,7 +156,7 @@ final class HealthSyncEngine {
                 let samples = samples ?? []
                 continuation.resume(
                     returning: SyncBatch(
-                        rows: HealthSampleRow.rows(from: samples, metric: metric, userID: userID),
+                        rows: HealthSampleRow.rows(from: samples, metric: metric, patientID: patientID),
                         deletedUUIDs: (deletedObjects ?? []).map(\.uuid),
                         anchorData: newAnchor.flatMap(SyncAnchorStore.archive),
                         addedCount: samples.count

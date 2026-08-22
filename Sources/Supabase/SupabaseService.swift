@@ -91,7 +91,7 @@ final class SupabaseService {
 
     // MARK: - Writes
 
-    /// Upserts rows against the unique index on (user_id, healthkit_uuid), so a
+    /// Upserts rows against the unique index on (patient_id, healthkit_uuid), so a
     /// sample that arrives twice updates in place instead of duplicating.
     ///
     /// `nonisolated` on purpose: `execute()` hands back a `PostgrestResponse`,
@@ -112,13 +112,13 @@ final class SupabaseService {
     }
 
     /// Mirrors deletions the user made in the Health app.
-    nonisolated func delete(healthKitUUIDs uuids: [UUID], userID: UUID) async throws {
+    nonisolated func delete(healthKitUUIDs uuids: [UUID], patientID: UUID) async throws {
         guard !uuids.isEmpty else { return }
         for chunk in uuids.chunked(into: SupabaseConfig.uploadChunkSize) {
             try await client
                 .from(SupabaseConfig.table)
                 .delete()
-                .eq("user_id", value: userID)
+                .eq("patient_id", value: patientID)
                 .in("healthkit_uuid", values: chunk.map(\.uuidString))
                 .execute()
         }

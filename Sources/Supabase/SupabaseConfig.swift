@@ -6,7 +6,7 @@ enum SupabaseConfig {
     /// The anon (publishable) key. Committing this is intentional and safe: it is
     /// designed to ship inside client binaries, carries only the `anon` Postgres
     /// role, and every policy on `health_samples` is scoped `to authenticated`
-    /// with `user_id = auth.uid()`. Row Level Security -- not the secrecy of this
+    /// with `patient_id = auth.uid()`. Row Level Security -- not the secrecy of this
     /// string -- is what protects the data.
     ///
     /// The `service_role` key is the opposite in every respect and must never
@@ -16,9 +16,9 @@ enum SupabaseConfig {
     /// Table that receives every sample.
     static let table = "health_samples"
 
-    /// Matches the unique index `health_samples_user_hk_uuid_key`. PostgREST needs
+    /// Matches the unique index `health_samples_patient_hk_uuid_key`. PostgREST needs
     /// the exact column list to turn an insert into an upsert.
-    static let conflictTarget = "user_id,healthkit_uuid"
+    static let conflictTarget = "patient_id,healthkit_uuid"
 
     /// How far back to reach on the very first sync. Without a bound, the initial
     /// anchored query would walk years of heart-rate samples -- easily hundreds of
