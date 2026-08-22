@@ -100,6 +100,25 @@ worked.
 
 ## Setup
 
+### History window
+
+The sync reaches back a configurable window — 30 days, 3/6 months, 1 year,
+5 years, or everything — set in the app under **History**.
+
+This is a *sync* setting, not a display filter: nothing outside the window is
+ever pulled from HealthKit, so it cannot be charted later.
+
+Widening it is a deliberate re-read rather than a filter change. An anchor
+records a position in HealthKit's delivery order, and samples older than the
+previous window sit **behind** that position — widening the predicate alone
+would never surface them, because HealthKit only hands back what comes *after*
+the anchor. So changing the window clears every anchor and the next sync walks
+the new window from scratch. That is safe precisely because uploads upsert on
+`(patient_id, healthkit_uuid)`: rows already present update in place instead of
+duplicating.
+
+A year or more can mean hundreds of thousands of samples.
+
 ### Database
 
 Run `supabase/schema.sql` in the Supabase SQL Editor. It is idempotent. The

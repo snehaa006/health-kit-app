@@ -13,12 +13,15 @@ struct DashboardView: View {
 
         ScrollView {
             VStack(spacing: 16) {
+                // A menu rather than a segmented control: six windows will not
+                // fit side by side on a phone without truncating every label.
                 Picker("Range", selection: $model.range) {
-                    ForEach(DashboardModel.Range.allCases) { range in
+                    ForEach(HistoryWindow.allCases) { range in
                         Text(range.rawValue).tag(range)
                     }
                 }
-                .pickerStyle(.segmented)
+                .pickerStyle(.menu)
+                .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.horizontal)
 
                 content

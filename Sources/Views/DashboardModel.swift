@@ -115,29 +115,15 @@ struct GroupedSeries: Identifiable {
 @Observable
 final class DashboardModel {
 
-    enum Range: String, CaseIterable, Identifiable {
-        case week = "7 Days"
-        case month = "30 Days"
-
-        var id: String { rawValue }
-
-        var days: Int {
-            switch self {
-            case .week:  return 7
-            case .month: return 30
-            }
-        }
-    }
-
     private(set) var series: [MetricSeries] = []
     private(set) var isLoading = false
     private(set) var errorMessage: String?
     private(set) var lastLoaded: Date?
 
-    /// 30 days is the ceiling on purpose: `SupabaseConfig.initialHistoryWindow`
-    /// is as far back as the sync ever reached, so offering a longer range would
-    /// draw an empty stretch that reads as lost data rather than as never-synced.
-    var range: Range = .week
+    /// Shares `HistoryWindow` with the sync rather than defining a parallel set
+    /// of ranges: the dashboard can only ever show what was actually pulled out
+    /// of HealthKit, so the two should not be able to drift apart.
+    var range: HistoryWindow = .month
 
     /// Metrics that returned data, bundled into their dashboard sections.
     /// A flat list of 37 cards is unusable, and for any given person most of
@@ -169,7 +155,9 @@ final class DashboardModel {
         errorMessage = nil
 
         let calendar = Calendar.current
-        let since = calendar.date(byAdding: .day, value: -range.days, to: Date()) ?? Date()
+        let since = range.days
+            .flatMap { calendar.date(byAdding: .day, value: -$0, to: Date()) }
+            ?? Date.distantPast
 
         do {
             let rows = try await supabase.fetchSamples(since: since, patientID: patientID)

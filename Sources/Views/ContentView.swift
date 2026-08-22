@@ -10,6 +10,7 @@ struct ContentView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var isSigningIn = false
+    @State private var pendingWindow: HistoryWindow?
 
     var body: some View {
         NavigationStack {
@@ -21,6 +22,7 @@ struct ContentView: View {
                     healthAccessSection
                     dashboardSection
                     syncSection
+                    historySection
                     backgroundSection
                     dataTypesSection
                 } else {
@@ -196,6 +198,48 @@ struct ContentView: View {
                 .foregroundStyle(.red)
                 .font(.footnote)
         }
+    }
+
+    // MARK: - History window
+
+    private var historySection: some View {
+        Section {
+            Picker("Reach back", selection: windowBinding) {
+                ForEach(HistoryWindow.allCases) { window in
+                    Text(window.rawValue).tag(window)
+                }
+            }
+            .disabled(engine.isSyncing)
+        } header: {
+            Text("History")
+        } footer: {
+            Text("How far back to pull from the Health app. Widening this clears the sync anchors so the next sync re-reads the whole window — already-uploaded samples update in place rather than duplicating. A year or more can mean hundreds of thousands of samples, so run it on Wi-Fi and leave the app open.")
+        }
+        .confirmationDialog(
+            "Re-read \(pendingWindow?.rawValue ?? "") of history?",
+            isPresented: Binding(get: { pendingWindow != nil }, set: { if !$0 { pendingWindow = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("Re-read and Sync") {
+                if let pendingWindow {
+                    engine.setHistoryWindow(pendingWindow)
+                    Task { await engine.syncAll() }
+                }
+                pendingWindow = nil
+            }
+            Button("Cancel", role: .cancel) { pendingWindow = nil }
+        } message: {
+            Text(pendingWindow?.isLarge == true
+                 ? "This can take a while and use a lot of data."
+                 : "The next sync will re-read this window.")
+        }
+    }
+
+    private var windowBinding: Binding<HistoryWindow> {
+        Binding(
+            get: { pendingWindow ?? engine.historyWindow },
+            set: { pendingWindow = ($0 == engine.historyWindow) ? nil : $0 }
+        )
     }
 
     // MARK: - Automatic sync

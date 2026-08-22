@@ -4,7 +4,7 @@ import Charts
 /// One metric, full width, with the summary statistics the card has no room for.
 struct MetricDetailView: View {
     let series: MetricSeries
-    let range: DashboardModel.Range
+    let range: HistoryWindow
 
     private var metric: HealthMetric { series.metric }
 
@@ -82,7 +82,8 @@ struct MetricDetailView: View {
                       ? "applewatch" : "iphone")
                     .font(.subheadline)
             }
-            Text("\(series.sampleCount) samples over the last \(range.days) days")
+            Text(range.days.map { "\(series.sampleCount) samples over the last \($0) days" }
+                 ?? "\(series.sampleCount) samples, all time")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
                 .padding(.top, 2)

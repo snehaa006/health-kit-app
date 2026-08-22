@@ -42,6 +42,10 @@ final class HealthSyncEngine {
     private(set) var lastSyncDates: [HealthMetric: Date] = [:]
     private(set) var syncedCounts: [HealthMetric: Int] = [:]
 
+    /// Mirrored for the same reason as the dates above: the store is backed by
+    /// `UserDefaults`, which SwiftUI cannot observe.
+    private(set) var historyWindow: HistoryWindow = .month
+
     let anchors = SyncAnchorStore()
 
     private let health = HealthKitManager.shared
@@ -66,6 +70,14 @@ final class HealthSyncEngine {
         }
         lastSyncDates = dates
         syncedCounts = counts
+        historyWindow = anchors.window
+    }
+
+    /// Changes how far back the sync reaches. Clears every anchor, so the next
+    /// run re-reads the whole window.
+    func setHistoryWindow(_ window: HistoryWindow) {
+        anchors.setWindow(window)
+        reloadDisplayState()
     }
 
     // MARK: - Entry point
@@ -114,13 +126,14 @@ final class HealthSyncEngine {
 
         // The same predicate on every run. The anchor records a position in
         // HealthKit's insert order; pairing it with a *moving* date window would
-        // let samples fall between the two, so the window is pinned once at
-        // first launch and reused verbatim.
-        let predicate = HKQuery.predicateForSamples(
-            withStart: anchors.historyStart(window: SupabaseConfig.initialHistoryWindow),
-            end: nil,
-            options: .strictStartDate
-        )
+        // let samples fall between the two, so the start is pinned when the
+        // window is chosen and reused verbatim until it changes.
+        //
+        // No predicate at all when the window is "Everything" -- an unbounded
+        // query is what reaches samples older than any bound we could name.
+        let predicate = anchors.historyStart().map {
+            HKQuery.predicateForSamples(withStart: $0, end: nil, options: .strictStartDate)
+        }
 
         var anchor = anchors.anchor(for: metric)
         var uploaded = 0
@@ -163,7 +176,7 @@ final class HealthSyncEngine {
     private func fetchPage(
         metric: HealthMetric,
         anchor: HKQueryAnchor?,
-        predicate: NSPredicate,
+        predicate: NSPredicate?,
         patientID: UUID
     ) async throws -> SyncBatch {
         let store = health.store
