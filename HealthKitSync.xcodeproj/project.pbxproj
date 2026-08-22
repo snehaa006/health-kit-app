@@ -1,0 +1,389 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3FAFC39A03D348DB10C25BA6 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */; };
+		4F55FC34D4E61D13AC2480DA /* HealthMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52F840BB21727679A3331A7 /* HealthMetric.swift */; };
+		53AFCD2DCC8B392E5421AF1F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */; };
+		88B28D76F64EAC514448E05D /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 496F551B614F9A583570910D /* Supabase */; };
+		977EBFD85BCBA912D87298EA /* SyncAnchorStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E42DB1B9D6FC7B5A693D020 /* SyncAnchorStore.swift */; };
+		A3D119BF62FB28A527E0C404 /* HealthSampleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF46DAD3A289D6BDE97A3C /* HealthSampleRow.swift */; };
+		AB87EACE321AD1B0466C91AB /* HealthSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE66C30FC0009A5C4F2BAC9 /* HealthSyncEngine.swift */; };
+		AE7FAF5C54C519B5F427302F /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */; };
+		CEA342E4857FB962D5521636 /* HealthKitSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A69B6212A6698614B48C8D /* HealthKitSyncApp.swift */; };
+		F2C952B9DFEE0072B32CB73A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8081F5EC20489A4874EE924C /* ContentView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		09A69B6212A6698614B48C8D /* HealthKitSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitSyncApp.swift; sourceTree = "<group>"; };
+		1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
+		5DF0AB64F2F9716F7D0D6900 /* HealthKitSync.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HealthKitSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E42DB1B9D6FC7B5A693D020 /* SyncAnchorStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAnchorStore.swift; sourceTree = "<group>"; };
+		8081F5EC20489A4874EE924C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BBE66C30FC0009A5C4F2BAC9 /* HealthSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSyncEngine.swift; sourceTree = "<group>"; };
+		C0EF46DAD3A289D6BDE97A3C /* HealthSampleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSampleRow.swift; sourceTree = "<group>"; };
+		C52F840BB21727679A3331A7 /* HealthMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthMetric.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A119C9AE18232EB50A2915AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88B28D76F64EAC514448E05D /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		484382ED62D5B96A2454520E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5DF0AB64F2F9716F7D0D6900 /* HealthKitSync.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4D5DFFA910AB47A04CC74CAD /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				87DC0122D200338AD7F9D9AB /* HealthKit */,
+				8B63DFAD124079FBC23EE9C1 /* Supabase */,
+				D4FF6F14918D7E20C8AAB8EF /* Views */,
+				09A69B6212A6698614B48C8D /* HealthKitSyncApp.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		87DC0122D200338AD7F9D9AB /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */,
+				C52F840BB21727679A3331A7 /* HealthMetric.swift */,
+				BBE66C30FC0009A5C4F2BAC9 /* HealthSyncEngine.swift */,
+				7E42DB1B9D6FC7B5A693D020 /* SyncAnchorStore.swift */,
+			);
+			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		8B63DFAD124079FBC23EE9C1 /* Supabase */ = {
+			isa = PBXGroup;
+			children = (
+				C0EF46DAD3A289D6BDE97A3C /* HealthSampleRow.swift */,
+				5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */,
+				1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */,
+			);
+			path = Supabase;
+			sourceTree = "<group>";
+		};
+		BAB4AC58C3B51E406D9DADCE = {
+			isa = PBXGroup;
+			children = (
+				4D5DFFA910AB47A04CC74CAD /* Sources */,
+				484382ED62D5B96A2454520E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D4FF6F14918D7E20C8AAB8EF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8081F5EC20489A4874EE924C /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		61C52CE79AAC66BA41A7EABD /* HealthKitSync */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D43813990486A40B0E02A05 /* Build configuration list for PBXNativeTarget "HealthKitSync" */;
+			buildPhases = (
+				085B6D0FBB4ADBAF0E2CA152 /* Sources */,
+				A119C9AE18232EB50A2915AC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HealthKitSync;
+			packageProductDependencies = (
+				496F551B614F9A583570910D /* Supabase */,
+			);
+			productName = HealthKitSync;
+			productReference = 5DF0AB64F2F9716F7D0D6900 /* HealthKitSync.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0037EFFD8DD2D85E994384BD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					61C52CE79AAC66BA41A7EABD = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A8ECF555DEFE487C185F84E3 /* Build configuration list for PBXProject "HealthKitSync" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = BAB4AC58C3B51E406D9DADCE;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				11B9E2C739E55A5A84EC05A4 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 484382ED62D5B96A2454520E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				61C52CE79AAC66BA41A7EABD /* HealthKitSync */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		085B6D0FBB4ADBAF0E2CA152 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2C952B9DFEE0072B32CB73A /* ContentView.swift in Sources */,
+				53AFCD2DCC8B392E5421AF1F /* HealthKitManager.swift in Sources */,
+				CEA342E4857FB962D5521636 /* HealthKitSyncApp.swift in Sources */,
+				4F55FC34D4E61D13AC2480DA /* HealthMetric.swift in Sources */,
+				A3D119BF62FB28A527E0C404 /* HealthSampleRow.swift in Sources */,
+				AB87EACE321AD1B0466C91AB /* HealthSyncEngine.swift in Sources */,
+				AE7FAF5C54C519B5F427302F /* SupabaseConfig.swift in Sources */,
+				3FAFC39A03D348DB10C25BA6 /* SupabaseService.swift in Sources */,
+				977EBFD85BCBA912D87298EA /* SyncAnchorStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D933AF9536E74CA38909F7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6207F87C3907BF2B50D678BD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Support/HealthKitSync.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				INFOPLIST_FILE = Support/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.snehaa006.HealthKitSync;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		7060B9600301F60C0B2AF9D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Support/HealthKitSync.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				INFOPLIST_FILE = Support/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.snehaa006.HealthKitSync;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		F6AF48DCD70679DF73106F79 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D43813990486A40B0E02A05 /* Build configuration list for PBXNativeTarget "HealthKitSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7060B9600301F60C0B2AF9D4 /* Debug */,
+				6207F87C3907BF2B50D678BD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A8ECF555DEFE487C185F84E3 /* Build configuration list for PBXProject "HealthKitSync" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D933AF9536E74CA38909F7C /* Debug */,
+				F6AF48DCD70679DF73106F79 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		11B9E2C739E55A5A84EC05A4 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		496F551B614F9A583570910D /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 11B9E2C739E55A5A84EC05A4 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0037EFFD8DD2D85E994384BD /* Project object */;
+}

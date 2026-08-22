@@ -1,0 +1,60 @@
+name: HealthKitSync
+
+options:
+  bundleIdPrefix: com.snehaa006
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    from: 2.0.0
+
+targets:
+  HealthKitSync:
+    type: application
+    platform: iOS
+
+    sources:
+      - path: Sources
+
+    dependencies:
+      - package: Supabase
+        product: Supabase
+
+    # HealthKit itself needs no linked framework entry beyond the import, but the
+    # capability must be declared here or the entitlement is never requested.
+    entitlements:
+      path: Support/HealthKitSync.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        # Without this, HKObserverQuery never fires while the app is suspended --
+        # this is the whole of Step 4.
+        com.apple.developer.healthkit.background-delivery: true
+
+    info:
+      path: Support/Info.plist
+      properties:
+        CFBundleDisplayName: Health Sync
+        # Required for reading. Requesting authorization without it is a hard crash.
+        NSHealthShareUsageDescription: >-
+          Reads your heart rate, steps, active energy, blood oxygen, heart rate
+          variability, and workouts so they can be synced to your health dashboard.
+        # NSHealthUpdateUsageDescription is deliberately absent: this app only reads.
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        ITSAppUsesNonExemptEncryption: false
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.snehaa006.HealthKitSync
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_EMIT_LOC_STRINGS: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: YES

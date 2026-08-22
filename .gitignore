@@ -10,3 +10,9 @@ xcuserdata/
 # Secrets — never commit Supabase keys
 Secrets.xcconfig
 *.local.plist
+
+# XcodeGen regenerates the project from project.yml. xcuserdata and resolved
+# package state are per-machine.
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+.swiftpm/
