@@ -32,6 +32,16 @@ final class HealthSyncEngine {
     private(set) var status: Status = .idle
     private(set) var isSyncing = false
 
+    /// Mirrors the anchor store's per-metric display state.
+    ///
+    /// `SyncAnchorStore` is backed by `UserDefaults`, which SwiftUI's observation
+    /// system cannot see: writing a date there updated nothing on screen, which
+    /// is why every row still read "Never" after a sync that had plainly worked.
+    /// Holding the same values as observed properties is what makes the list
+    /// refresh -- the store stays the source of truth across launches.
+    private(set) var lastSyncDates: [HealthMetric: Date] = [:]
+    private(set) var syncedCounts: [HealthMetric: Int] = [:]
+
     let anchors = SyncAnchorStore()
 
     private let health = HealthKitManager.shared
@@ -42,7 +52,21 @@ final class HealthSyncEngine {
     /// is wrong rather than merely large.
     private let maxPagesPerMetric = 200
 
-    private init() {}
+    private init() {
+        reloadDisplayState()
+    }
+
+    /// Re-reads the persisted per-metric state into the observed properties.
+    private func reloadDisplayState() {
+        var dates: [HealthMetric: Date] = [:]
+        var counts: [HealthMetric: Int] = [:]
+        for metric in HealthMetric.allCases {
+            dates[metric] = anchors.lastSync(for: metric)
+            counts[metric] = anchors.syncedCount(for: metric)
+        }
+        lastSyncDates = dates
+        syncedCounts = counts
+    }
 
     // MARK: - Entry point
 
@@ -130,6 +154,7 @@ final class HealthSyncEngine {
         }
 
         anchors.recordSync(for: metric, date: Date(), newRows: uploaded)
+        reloadDisplayState()
         return (uploaded, deleted)
     }
 

@@ -18,6 +18,7 @@ struct ContentView: View {
                 } else if supabase.isSignedIn {
                     accountSection
                     healthAccessSection
+                    dashboardSection
                     syncSection
                     dataTypesSection
                 } else {
@@ -123,6 +124,20 @@ struct ContentView: View {
         }
     }
 
+    // MARK: - Dashboard
+
+    private var dashboardSection: some View {
+        Section {
+            NavigationLink {
+                DashboardView()
+            } label: {
+                Label("View Dashboard", systemImage: "chart.xyaxis.line")
+            }
+        } footer: {
+            Text("Charts are drawn from what reached Supabase, not from HealthKit \u{2014} so they double as a check that the sync worked.")
+        }
+    }
+
     // MARK: - Sync
 
     private var syncSection: some View {
@@ -193,7 +208,7 @@ struct ContentView: View {
                         Text(lastSyncText(for: metric))
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        let count = engine.anchors.syncedCount(for: metric)
+                        let count = engine.syncedCounts[metric] ?? 0
                         if count > 0 {
                             Text("\(count) sent")
                                 .font(.caption2)
@@ -208,7 +223,7 @@ struct ContentView: View {
     }
 
     private func lastSyncText(for metric: HealthMetric) -> String {
-        guard let date = engine.anchors.lastSync(for: metric) else { return "Never" }
+        guard let date = engine.lastSyncDates[metric] else { return "Never" }
         return date.formatted(.relative(presentation: .numeric))
     }
 }

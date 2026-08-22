@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		267B337B4201A6758B39B6BE /* HealthSampleReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31450AEB38E1313F5BA03F34 /* HealthSampleReading.swift */; };
+		3A172C61207A2243C61FEE18 /* MetricDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3713444438D4B5B5EEAFB1F /* MetricDetailView.swift */; };
 		3FAFC39A03D348DB10C25BA6 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */; };
+		400455C333563978A483141E /* HealthMetric+Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14544F88CCDB55C0AD853742 /* HealthMetric+Chart.swift */; };
 		4F55FC34D4E61D13AC2480DA /* HealthMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52F840BB21727679A3331A7 /* HealthMetric.swift */; };
 		53AFCD2DCC8B392E5421AF1F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */; };
 		88B28D76F64EAC514448E05D /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 496F551B614F9A583570910D /* Supabase */; };
@@ -16,14 +18,19 @@
 		A3D119BF62FB28A527E0C404 /* HealthSampleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EF46DAD3A289D6BDE97A3C /* HealthSampleRow.swift */; };
 		AB87EACE321AD1B0466C91AB /* HealthSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE66C30FC0009A5C4F2BAC9 /* HealthSyncEngine.swift */; };
 		AE7FAF5C54C519B5F427302F /* SupabaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */; };
+		AF0765AF79D3BD63678A934B /* DashboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381F8F3D742CA7A127F5A1E5 /* DashboardModel.swift */; };
 		CEA342E4857FB962D5521636 /* HealthKitSyncApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A69B6212A6698614B48C8D /* HealthKitSyncApp.swift */; };
+		F03B92DB4BA831AD830A22E2 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1457B45E76F95E45C6FE5F66 /* DashboardView.swift */; };
 		F2C952B9DFEE0072B32CB73A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8081F5EC20489A4874EE924C /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		09A69B6212A6698614B48C8D /* HealthKitSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitSyncApp.swift; sourceTree = "<group>"; };
+		14544F88CCDB55C0AD853742 /* HealthMetric+Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HealthMetric+Chart.swift"; sourceTree = "<group>"; };
+		1457B45E76F95E45C6FE5F66 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		31450AEB38E1313F5BA03F34 /* HealthSampleReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSampleReading.swift; sourceTree = "<group>"; };
+		381F8F3D742CA7A127F5A1E5 /* DashboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardModel.swift; sourceTree = "<group>"; };
 		5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
 		5DF0AB64F2F9716F7D0D6900 /* HealthKitSync.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HealthKitSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -32,6 +39,7 @@
 		BBE66C30FC0009A5C4F2BAC9 /* HealthSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSyncEngine.swift; sourceTree = "<group>"; };
 		C0EF46DAD3A289D6BDE97A3C /* HealthSampleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSampleRow.swift; sourceTree = "<group>"; };
 		C52F840BB21727679A3331A7 /* HealthMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthMetric.swift; sourceTree = "<group>"; };
+		D3713444438D4B5B5EEAFB1F /* MetricDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +107,10 @@
 			isa = PBXGroup;
 			children = (
 				8081F5EC20489A4874EE924C /* ContentView.swift */,
+				381F8F3D742CA7A127F5A1E5 /* DashboardModel.swift */,
+				1457B45E76F95E45C6FE5F66 /* DashboardView.swift */,
+				14544F88CCDB55C0AD853742 /* HealthMetric+Chart.swift */,
+				D3713444438D4B5B5EEAFB1F /* MetricDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -168,12 +180,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2C952B9DFEE0072B32CB73A /* ContentView.swift in Sources */,
+				AF0765AF79D3BD63678A934B /* DashboardModel.swift in Sources */,
+				F03B92DB4BA831AD830A22E2 /* DashboardView.swift in Sources */,
 				53AFCD2DCC8B392E5421AF1F /* HealthKitManager.swift in Sources */,
 				CEA342E4857FB962D5521636 /* HealthKitSyncApp.swift in Sources */,
+				400455C333563978A483141E /* HealthMetric+Chart.swift in Sources */,
 				4F55FC34D4E61D13AC2480DA /* HealthMetric.swift in Sources */,
 				267B337B4201A6758B39B6BE /* HealthSampleReading.swift in Sources */,
 				A3D119BF62FB28A527E0C404 /* HealthSampleRow.swift in Sources */,
 				AB87EACE321AD1B0466C91AB /* HealthSyncEngine.swift in Sources */,
+				3A172C61207A2243C61FEE18 /* MetricDetailView.swift in Sources */,
 				AE7FAF5C54C519B5F427302F /* SupabaseConfig.swift in Sources */,
 				3FAFC39A03D348DB10C25BA6 /* SupabaseService.swift in Sources */,
 				977EBFD85BCBA912D87298EA /* SyncAnchorStore.swift in Sources */,
