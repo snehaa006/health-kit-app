@@ -111,6 +111,34 @@ final class SupabaseService {
         }
     }
 
+    // MARK: - Reads
+
+    /// Pulls every metric for the dashboard in a single round trip.
+    ///
+    /// Deliberately *not* one request per type: six sequential round trips is
+    /// six times the latency for the same bytes, and PostgREST is happy to
+    /// return the lot in one response for the charts to group locally. The
+    /// `(patient_id, type, start_date desc)` index in schema.sql covers this.
+    ///
+    /// `nonisolated` for the same reason as the writes -- `PostgrestResponse` is
+    /// not `Sendable`, so the call is kept off the main actor entirely and only
+    /// the decoded (and `Sendable`) rows come back.
+    nonisolated func fetchSamples(
+        since: Date,
+        patientID: UUID,
+        limit: Int = 20_000
+    ) async throws -> [HealthSampleReading] {
+        try await client
+            .from(SupabaseConfig.table)
+            .select("id,type,value,unit,start_date,source")
+            .eq("patient_id", value: patientID)
+            .gte("start_date", value: HealthSampleRow.timestamp(since))
+            .order("start_date", ascending: true)
+            .limit(limit)
+            .execute()
+            .value
+    }
+
     /// Mirrors deletions the user made in the Health app.
     nonisolated func delete(healthKitUUIDs uuids: [UUID], patientID: UUID) async throws {
         guard !uuids.isEmpty else { return }

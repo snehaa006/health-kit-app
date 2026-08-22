@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		267B337B4201A6758B39B6BE /* HealthSampleReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31450AEB38E1313F5BA03F34 /* HealthSampleReading.swift */; };
 		3FAFC39A03D348DB10C25BA6 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */; };
 		4F55FC34D4E61D13AC2480DA /* HealthMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52F840BB21727679A3331A7 /* HealthMetric.swift */; };
 		53AFCD2DCC8B392E5421AF1F /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */; };
@@ -22,6 +23,7 @@
 /* Begin PBXFileReference section */
 		09A69B6212A6698614B48C8D /* HealthKitSyncApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitSyncApp.swift; sourceTree = "<group>"; };
 		1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		31450AEB38E1313F5BA03F34 /* HealthSampleReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthSampleReading.swift; sourceTree = "<group>"; };
 		5583D876EFBB4529C99E01A7 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseConfig.swift; sourceTree = "<group>"; };
 		5DF0AB64F2F9716F7D0D6900 /* HealthKitSync.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HealthKitSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,6 +79,7 @@
 		8B63DFAD124079FBC23EE9C1 /* Supabase */ = {
 			isa = PBXGroup;
 			children = (
+				31450AEB38E1313F5BA03F34 /* HealthSampleReading.swift */,
 				C0EF46DAD3A289D6BDE97A3C /* HealthSampleRow.swift */,
 				5C4671802F71CAFE88660C0A /* SupabaseConfig.swift */,
 				1DB8C941D22CD6FA7F10273D /* SupabaseService.swift */,
@@ -168,6 +171,7 @@
 				53AFCD2DCC8B392E5421AF1F /* HealthKitManager.swift in Sources */,
 				CEA342E4857FB962D5521636 /* HealthKitSyncApp.swift in Sources */,
 				4F55FC34D4E61D13AC2480DA /* HealthMetric.swift in Sources */,
+				267B337B4201A6758B39B6BE /* HealthSampleReading.swift in Sources */,
 				A3D119BF62FB28A527E0C404 /* HealthSampleRow.swift in Sources */,
 				AB87EACE321AD1B0466C91AB /* HealthSyncEngine.swift in Sources */,
 				AE7FAF5C54C519B5F427302F /* SupabaseConfig.swift in Sources */,
